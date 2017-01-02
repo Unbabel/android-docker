@@ -63,6 +63,7 @@ RUN echo y | android update sdk --no-ui --all --filter platform-tools | grep 'pa
 # SDKs
 # Please keep these in descending order!
 RUN echo y | android update sdk --no-ui --all --filter android-25 | grep 'package installed'
+RUN echo y | android update sdk --no-ui --all --filter android-24 | grep 'package installed'
 
 # build tools
 # Please keep these in descending order!
@@ -83,14 +84,12 @@ RUN apt-get -y install gradle
 RUN gradle -v
 
 # Install Maven 3 from PPA
-
 RUN apt-get purge maven maven2
 RUN apt-get update
 RUN apt-get -y install maven
 RUN mvn --version
 
 # Install Fastlane
-
 RUN gem install fastlane --no-document
 RUN fastlane --version
 
@@ -100,16 +99,6 @@ RUN fastlane --version
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libqt5widgets5
 ENV QT_QPA_PLATFORM offscreen
 ENV LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${ANDROID_HOME}/tools/lib64
-
-# Create emulator
-RUN echo "no" | android create avd \
-                --force \
-                --device "Nexus 5" \
-                --name test \
-                --target android-24 \
-                --abi armeabi-v7a \
-                --skin WVGA800 \
-                --sdcard 512M
 
 # Cleaning
 RUN apt-get clean
