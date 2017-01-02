@@ -71,6 +71,7 @@ RUN echo y | android update sdk --no-ui --all --filter build-tools-25.0.2 | grep
 
 # Android System Images, for emulators
 # Please keep these in descending order!
+RUN echo y | android update sdk --no-ui --all --filter sys-img-x86_64-google_apis-25 | grep 'package installed'
 RUN echo y | android update sdk --no-ui --all --filter sys-img-armeabi-v7a-android-24 | grep 'package installed'
 
 # Extras
@@ -99,6 +100,10 @@ RUN fastlane --version
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libqt5widgets5
 ENV QT_QPA_PLATFORM offscreen
 ENV LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${ANDROID_HOME}/tools/lib64
+
+# Git identity
+RUN git config --global user.email ci@unbabel.com
+RUN git config --global user.name "Unbabel CI"
 
 # Cleaning
 RUN apt-get clean
