@@ -95,7 +95,6 @@ RUN gem install fastlane --no-document
 RUN fastlane --version
 
 # Install additional packages
-
 # Required for Android ARM Emulator
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libqt5widgets5
 ENV QT_QPA_PLATFORM offscreen
