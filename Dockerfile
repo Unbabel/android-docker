@@ -26,7 +26,6 @@ RUN dpkg --add-architecture i386
 RUN apt-get update -qq
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y openjdk-8-jdk libc6:i386 libstdc++6:i386 libgcc1:i386 libncurses5:i386 libz1:i386
 
-
 # Install Ruby from source
 # from source: mainly because of GEM native extensions,
 # this is the most reliable way to use Ruby no Ubuntu if GEM native extensions are required
@@ -39,7 +38,6 @@ RUN rm -rf ruby-2.3.3
 RUN rm ruby-2.3.3.tar.gz
 # install bundler
 RUN gem install bundler --no-document
-
 
 # Download Android SDK tools into $ANDROID_HOME
 RUN cd /opt && wget -q https://dl.google.com/android/repository/tools_r25.2.4-linux.zip -O android-sdk-tools.zip
@@ -78,6 +76,14 @@ RUN echo y | android update sdk --no-ui --all --filter sys-img-armeabi-v7a-andro
 RUN echo y | android update sdk --no-ui --all --filter extra-android-m2repository | grep 'package installed'
 RUN echo y | android update sdk --no-ui --all --filter extra-google-m2repository | grep 'package installed'
 RUN echo y | android update sdk --no-ui --all --filter extra-google-google_play_services | grep 'package installed'
+
+# Accept Android licences
+RUN mkdir "$ANDROID_HOME/licenses" || true
+RUN echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
+RUN echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+
+# Remove NDK ENV VARS
+RUN unset ANDROID_NDK_HOME
 
 # Install Gradle from PPA
 RUN apt-get update
